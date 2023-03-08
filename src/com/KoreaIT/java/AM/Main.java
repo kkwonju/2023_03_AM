@@ -1,27 +1,24 @@
-/*
-	0308 project
-	1. git  
-*/
-package com.KoreaIT.java.AM; // move package
+package com.KoreaIT.java.AM;
 
 import java.util.Scanner;
 
 public class Main {
-
 	public static void main(String[] args) {
 		System.out.println("==프로그램 시작==");
-		
-		Scanner sc = new Scanner(System.in);
-		
-		String command =  sc.nextLine();
-		System.out.printf("입력된 명령어 : %s\n", command);
-		
-		int command2 =  sc.nextInt();
-		System.out.printf("입력된 명령어 : %d\n", command2);
-		
-		System.out.println("==프로그램 끝");
-		
-		sc.close(); // 자원 사용을 종료한다
-	}
 
+		Scanner sc = new Scanner(System.in);
+
+		while (true) {
+			System.out.print("명령어 > ");
+			String command = sc.nextLine();
+			
+			if(command.equals("exit")) {
+				break;
+			}
+		}
+
+		System.out.println("==프로그램 끝==");
+
+		sc.close();
+	}
 }
