@@ -9,12 +9,15 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Main {
-	public static void main(String[] args) {		
+	public static void main(String[] args) {
+		
 		System.out.println("==프로그램 시작==");
 		
 		Scanner sc = new Scanner(System.in);
 
 		int lastArticleId = 0;
+		
+		/* articles : Article만 넣을 수 있는 List 객체 생성 */
 		List<Article> articles = new ArrayList<>();
 		
 		while (true) {
@@ -36,10 +39,10 @@ public class Main {
 				if(articles.size() == 0) {
 					System.out.println("게시글이 없습니다");
 				} else {
-					System.out.println(" 번호 / 제목 / 조회 ");
+					System.out.println(" 번호 / 제목 / 조회 수 ");
 					for(int i = articles.size() - 1; i >= 0; i--) {
 						Article article = articles.get(i);
-						System.out.printf(" %d / %s / %d \n", article.id, article.title, article.view);
+						System.out.printf(" %d / %s / %d \n", article.id, article.title, article.hit);
 					}
 				}
 			/* 게시글 작성 */
@@ -52,7 +55,7 @@ public class Main {
 				System.out.print("내용 : ");
 				String content = sc.nextLine();
 				
-				Article article = new Article(id, regDate, title, content);
+				Article article = new Article(id, regDate, regDate, title, content);
 				articles.add(article);
 				
 				System.out.printf("%d번 글이 생성되었습니다\n", id);
@@ -86,14 +89,11 @@ public class Main {
 				} 
 				
 				System.out.println("번호 : " + foundArticle.id);
-				if(foundArticle.updateDate == null) {
-					System.out.println("날짜 : " + foundArticle.regDate);					
-				} else {
-					System.out.println(foundArticle.updateDate);
-				}
+				System.out.println("날짜 : " + foundArticle.regDate);					
+				System.out.println("수정날짜 : " + foundArticle.updateDate);
 				System.out.println("제목 : " + foundArticle.title);
 				System.out.println("내용 : " + foundArticle.content);
-				foundArticle.view++;
+				foundArticle.hit++;
 			
 			/* 게시글 삭제 */
 			} else if(command.startsWith("article delete")) {
@@ -172,15 +172,17 @@ class Article {
 	int id;
 	String title;
 	String regDate;
-	String updateDate = null;
+	String updateDate;
 	String content;
 	String time;
-	int view;
+	int hit;
 	
-	Article(int id, String regDate, String title, String content){
+	Article(int id, String regDate, String updateDate, String title, String content){
 		this.id = id;
+		this.regDate = regDate;
+		this.updateDate = updateDate;
 		this.title = title;
 		this.content = content;
-		this.regDate = regDate;
+		this.hit = 0;
 	}
 }
