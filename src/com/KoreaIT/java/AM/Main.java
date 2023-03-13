@@ -165,7 +165,7 @@ public class Main {
 					}
 					break;
 				}
-
+				//
 				System.out.print("이름 : ");
 				String name = sc.nextLine();
 
