@@ -7,7 +7,7 @@ import java.util.Scanner;
 import com.KoreaIT.java.AM.dto.Article;
 import com.KoreaIT.java.AM.util.Util;
 
-public class ArticleController extends Controller{
+public class ArticleController extends Controller {
 	private List<Article> articles;
 	private Scanner sc;
 	private String command;
@@ -19,13 +19,17 @@ public class ArticleController extends Controller{
 		this.articles = new ArrayList<>();
 		this.sc = sc;
 	}
-	
+
 	public void doAction(String actionMethodName, String command) {
 		this.command = command;
 		this.actionMethodName = actionMethodName;
-		
-		switch(actionMethodName) {
+
+		switch (actionMethodName) {
 		case "write":
+			if (isLogined() == false) {
+				System.out.println("로그인 상태가 아닙니다");
+				break;
+			}
 			doWrite();
 			break;
 		case "list":
@@ -46,6 +50,7 @@ public class ArticleController extends Controller{
 		}
 	}
 
+	/** 게시글 검색(목록) */
 	public void showList() {
 		if (articles.size() == 0) {
 			System.out.println("게시글이 없습니다");
@@ -76,7 +81,7 @@ public class ArticleController extends Controller{
 		}
 	}
 
-
+	/** 게시글 작성 */
 	private void doWrite() {
 		int id = lastArticleId + 1;
 		System.out.print("제목 : ");
@@ -90,6 +95,7 @@ public class ArticleController extends Controller{
 		lastArticleId++;
 	}
 
+	/** 게시글 상세보기 */
 	private void showDetail() {
 		String[] cmdDiv = command.split(" "); // 'article' 'detail' '1'
 		if (cmdDiv.length < 3) {
@@ -111,6 +117,7 @@ public class ArticleController extends Controller{
 		foundArticle.hit++;
 	}
 
+	/** 게시글 수정 */
 	private void doModify() {
 		String[] cmdDiv = command.split(" ");
 		if (cmdDiv.length < 3) {
@@ -133,6 +140,7 @@ public class ArticleController extends Controller{
 		System.out.println(id + "번 게시글이 수정되었습니다, " + Util.getNowDateTimeStr());
 	}
 
+	/** 게시글 삭제 */
 	private void doDelete() {
 		String[] cmdDiv = command.split(" ");
 
@@ -150,6 +158,7 @@ public class ArticleController extends Controller{
 		System.out.printf("%d번 게시물이 삭제되었습니다\n", id);
 	}
 
+	/** id값으로 게시글 index 찾기 */
 	private int getArticleIndexByid(int id) {
 		for (int i = 0; i < articles.size(); i++) {
 			Article article = articles.get(i);
@@ -160,6 +169,7 @@ public class ArticleController extends Controller{
 		return -1;
 	}
 
+	/** id값으로 게시글 찾기 */
 	private Article getArticleById(int id) {
 		for (int i = 0; i < articles.size(); i++) {
 			Article article = articles.get(i);

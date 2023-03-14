@@ -9,11 +9,11 @@ import com.KoreaIT.java.AM.dto.Member;
 import com.KoreaIT.java.AM.util.Util;
 
 public class MemberController extends Controller {
-	private List<Member> members;
+	public static List<Member> members;
 	private Scanner sc;
 	private String command;
 	private String actionMethodName;
-	private Member loginedMember = null; // 전역변수, ~logout
+	public static Member loginedMember = null; // 전역변수, ~logout
 
 	int lastMemberId = 3;
 
@@ -44,16 +44,7 @@ public class MemberController extends Controller {
 			break;
 		}
 	}
-
-
-	/** 로그인 상태 확인 */
-	private boolean isLogined() {
-		if (loginedMember == null) { // 만약 로그인되어 있지 않을 때
-			return false; // false 반환
-		}
-		return true; // 되어있을 때, true 반환
-	}
-	
+	/** 회원정보 출력 */
 	private void showProfile() {
 		if (isLogined()) {
 			System.out.println("== 현재 로그인 된 회원의 정보 ==");
