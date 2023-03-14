@@ -13,6 +13,9 @@ public class MemberController extends Controller {
 	private Scanner sc;
 	private String command;
 	private String actionMethodName;
+	private Member loginedMember; // 전역변수, ~logout
+
+	int lastMemberId = 3;
 
 	public MemberController(Scanner sc) {
 		this.members = new ArrayList<>();
@@ -27,9 +30,9 @@ public class MemberController extends Controller {
 		case "join":
 			dojoin();
 			break;
-//		case "login":
-//			login();
-//			break;
+		case "login":
+			doLogin();
+			break;
 //		case "logout":
 //			logout();
 //			break;
@@ -39,7 +42,39 @@ public class MemberController extends Controller {
 		}
 	}
 
-	int lastMemberId = 3;
+	/** 로그인 기능 */
+	private void doLogin() {
+		System.out.print("아이디 : ");
+		String loginId = sc.nextLine();
+		Member member = getMemberByLoginId(loginId);
+
+		if (member == null) {
+			System.out.println("일치하는 회원이 없습니다");
+			return;
+		}
+		System.out.print("비밀번호 : ");
+		String loginPw = sc.nextLine();
+		if (member.loginPw.equals(loginPw)) {
+			System.out.println("비밀번호가 일치하지 않습니다");
+			return;
+		}
+		loginedMember = member;
+		System.out.printf("반갑습니다 %s님" + loginedMember.userName);
+		/*
+		 로그인 상태 판단, boolean 또는 int는 
+		 추가적인 데이터를 사용할 수 없음
+		 */
+	}
+
+	/** loginId 찾아 Member 인스턴스 반환 */
+	private Member getMemberByLoginId(String loginId) {
+		int index = getMemberByUserID(loginId);
+		if (index == -1) {
+			return null;
+		}
+		return members.get(index);
+
+	}
 
 	/** 회원가입 기능 */
 	private void dojoin() {
@@ -82,19 +117,19 @@ public class MemberController extends Controller {
 	}
 
 	/** 로그인 아이디 중복검사 */
-	public boolean isJoinalbeUserID(String userID) {
-		int index = getMemberByUserID(userID);
+	public boolean isJoinalbeUserID(String loginId) {
+		int index = getMemberByUserID(loginId);
 		if (index == -1) {
 			return true; // 일치하는 값이 없었다 > 그러니 사용 가능하다
 		}
 		return false; // 일치하는 값이 있었다 > 중복된다
 	}
 
-	/** 데이터 내 id 찾기 */
-	public int getMemberByUserID(String userID) {
+	/** loginId 찾아 index 반환 */
+	public int getMemberByUserID(String loginId) {
 		int i = 0;
 		for (Member member : members) {
-			if (member.userID.equals(userID)) { // equals와 ==의 차이
+			if (member.loginId.equals(loginId)) { // equals와 ==의 차이
 				return i;
 			}
 			i++;
@@ -102,35 +137,7 @@ public class MemberController extends Controller {
 		return -1;
 	}
 
-//	public void login() {
-//		System.out.println("==  Login  ==");
-//		while (true) {
-//			System.out.print("아이디 : ");
-//			String loginId = sc.nextLine();			
-//			int index = getMemberByUserID(loginId);
-//			Member foundMember = members.get(index);
-//			if(loginId.equals(foundMember.userID) == false) {
-//				System.out.println("가입되지 않은 아이디입니다");
-//				continue;
-//			}
-//			System.out.print("비밀번호 : ");
-//			String loginPw = sc.nextLine();
-//			if(loginPw.equals(foundMember.userPassword) == false) {
-//				System.out.println("비밀번호가 일치하지 않습니다");
-//				continue;
-//			}
-//			break;
-//		}
-//		System.out.println("로그인되었습니다");
-//
-//	}
-//
-//	public void logout() {
-//
-//	}
-
 	public void makeTestDataMember() {
-		System.out.println("테스트를 위한 데이터를 생성합니다");
 		members.add(new Member("아이디 1", "0000", "kwonju"));
 		members.add(new Member("아이디 2", "1111", "kwonju"));
 		members.add(new Member("아이디 3", "2222", "kwonju"));
