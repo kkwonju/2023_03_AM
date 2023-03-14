@@ -67,6 +67,9 @@ public class App {
 					System.out.println("로그인 후 이용해주세요");
 					continue;
 				}
+				break;
+			}
+			switch (forLoginCheck) {
 			case "member/login":
 			case "member/join":
 				if (Controller.isLogined()) {
@@ -75,6 +78,8 @@ public class App {
 				}
 				break;
 			}
+			
+			
 
 			controller.doAction(actionMethodName, command);
 
