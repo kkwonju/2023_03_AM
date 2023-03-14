@@ -15,8 +15,8 @@ public class ArticleController extends Controller{
 
 	int lastArticleId = 3;
 
-	public ArticleController(List<Article> articles, Scanner sc) {
-		this.articles = articles;
+	public ArticleController(Scanner sc) {
+		this.articles = new ArrayList<>();
 		this.sc = sc;
 	}
 	
@@ -41,7 +41,7 @@ public class ArticleController extends Controller{
 			doDelete();
 			break;
 		default:
-			System.out.println("명령어를 확인해주세요");
+			System.out.println("해당 기능은 사용할 수 없습니다");
 			break;
 		}
 	}
@@ -77,7 +77,7 @@ public class ArticleController extends Controller{
 	}
 
 
-	public void doWrite() {
+	private void doWrite() {
 		int id = lastArticleId + 1;
 		System.out.print("제목 : ");
 		String title = sc.nextLine();
@@ -90,7 +90,7 @@ public class ArticleController extends Controller{
 		lastArticleId++;
 	}
 
-	public void showDetail() {
+	private void showDetail() {
 		String[] cmdDiv = command.split(" "); // 'article' 'detail' '1'
 		if (cmdDiv.length < 3) {
 			System.out.println("게시물 번호를 확인해주세요");
@@ -111,7 +111,7 @@ public class ArticleController extends Controller{
 		foundArticle.hit++;
 	}
 
-	public void doModify() {
+	private void doModify() {
 		String[] cmdDiv = command.split(" ");
 		if (cmdDiv.length < 3) {
 			System.out.println("게시물 번호를 확인해주세요");
@@ -133,7 +133,7 @@ public class ArticleController extends Controller{
 		System.out.println(id + "번 게시글이 수정되었습니다, " + Util.getNowDateTimeStr());
 	}
 
-	public void doDelete() {
+	private void doDelete() {
 		String[] cmdDiv = command.split(" ");
 
 		if (cmdDiv.length < 3) {
@@ -150,7 +150,7 @@ public class ArticleController extends Controller{
 		System.out.printf("%d번 게시물이 삭제되었습니다\n", id);
 	}
 
-	public int getArticleIndexByid(int id) {
+	private int getArticleIndexByid(int id) {
 		for (int i = 0; i < articles.size(); i++) {
 			Article article = articles.get(i);
 			if (article.id == id) {
@@ -160,7 +160,7 @@ public class ArticleController extends Controller{
 		return -1;
 	}
 
-	public Article getArticleById(int id) {
+	private Article getArticleById(int id) {
 		for (int i = 0; i < articles.size(); i++) {
 			Article article = articles.get(i);
 			if (article.id == id) {

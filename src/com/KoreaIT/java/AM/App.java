@@ -11,19 +11,12 @@ import com.KoreaIT.java.AM.dto.Article;
 import com.KoreaIT.java.AM.dto.Member;
  
 public class App {
-	/* articles : Article만 넣을 수 있는 List 객체 생성 */
-	static List<Article> articles;
-	static List<Member> members;
-
 	public void start() {
-		articles = new ArrayList<>();
-		members = new ArrayList<>();
-
 		System.out.println("==프로그램 시작==");
 		Scanner sc = new Scanner(System.in);
 
-		MemberController memberController = new MemberController(members, sc);
-		ArticleController articleController = new ArticleController(articles, sc);
+		MemberController memberController = new MemberController(sc);
+		ArticleController articleController = new ArticleController(sc);
 		articleController.makeTestData();
 		Controller controller;
 
