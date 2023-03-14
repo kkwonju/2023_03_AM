@@ -13,7 +13,7 @@ public class MemberController extends Controller {
 	private Scanner sc;
 	private String command;
 	private String actionMethodName;
-	private Member loginedMember; // 전역변수, ~logout
+	private Member loginedMember = null; // 전역변수, ~logout
 
 	int lastMemberId = 3;
 
@@ -33,17 +33,53 @@ public class MemberController extends Controller {
 		case "login":
 			doLogin();
 			break;
-//		case "logout":
-//			logout();
-//			break;
+		case "logout":
+			doLogout();
+			break;
+		case "profile":
+			showProfile();
+			break;
 		default:
-			System.out.println("해당 기능은 사용할 수 없습니다");
+			System.out.println("해당 기능을 찾을 수 없습니다");
 			break;
 		}
 	}
 
+
+	/** 로그인 상태 확인 */
+	private boolean isLogined() {
+		if (loginedMember == null) { // 만약 로그인되어 있지 않을 때
+			return false; // false 반환
+		}
+		return true; // 되어있을 때, true 반환
+	}
+	
+	private void showProfile() {
+		if (isLogined()) {
+			System.out.println("== 현재 로그인 된 회원의 정보 ==");
+			System.out.printf("로그인 아이디 : %s\n", loginedMember.loginId);
+			System.out.printf("이름 : %s\n", loginedMember.userName);
+			return;
+		}
+		System.out.println("로그아웃 상태입니다");
+	}
+
+	/** 로그아웃 기능 */
+	private void doLogout() {
+		if (isLogined()) {
+			loginedMember = null;
+			System.out.println("로그아웃되었습니다");
+			return;
+		}
+		System.out.println("로그아웃 상태입니다");
+	}
+
 	/** 로그인 기능 */
 	private void doLogin() {
+		if (isLogined()) {
+			System.out.println("현재 로그인 상태입니다");
+			return;
+		}
 		System.out.print("아이디 : ");
 		String loginId = sc.nextLine();
 		Member member = getMemberByLoginId(loginId);
@@ -54,30 +90,23 @@ public class MemberController extends Controller {
 		}
 		System.out.print("비밀번호 : ");
 		String loginPw = sc.nextLine();
-		if (member.loginPw.equals(loginPw)) {
+		if (member.loginPw.equals(loginPw) == false) {
 			System.out.println("비밀번호가 일치하지 않습니다");
 			return;
 		}
 		loginedMember = member;
-		System.out.printf("반갑습니다 %s님" + loginedMember.userName);
+		System.out.printf("반갑습니다, %s님!\n", loginedMember.userName);
 		/*
-		 로그인 상태 판단, boolean 또는 int는 
-		 추가적인 데이터를 사용할 수 없음
+		 * 로그인 상태 판단, boolean 또는 int는 추가적인 데이터를 사용할 수 없음
 		 */
-	}
-
-	/** loginId 찾아 Member 인스턴스 반환 */
-	private Member getMemberByLoginId(String loginId) {
-		int index = getMemberByUserID(loginId);
-		if (index == -1) {
-			return null;
-		}
-		return members.get(index);
-
 	}
 
 	/** 회원가입 기능 */
 	private void dojoin() {
+		if (isLogined()) {
+			System.out.println("현재 사용할 수 없는 기능입니다");
+			return;
+		}
 		int id = lastMemberId + 1;
 		String userId = null;
 		String userPassword = null;
@@ -93,7 +122,6 @@ public class MemberController extends Controller {
 			System.out.println("멋진 아이디입니다");
 			break;
 		}
-
 		while (true) {
 			System.out.print("비밀번호 : ");
 			userPassword = sc.nextLine();
@@ -113,6 +141,16 @@ public class MemberController extends Controller {
 		members.add(member);
 		System.out.println(id + "번 회원이 가입되었습니다");
 		lastMemberId++;
+		return;
+	}
+
+	/** loginId 찾아 Member 인스턴스 반환 */
+	private Member getMemberByLoginId(String loginId) {
+		int index = getMemberByUserID(loginId);
+		if (index == -1) {
+			return null;
+		}
+		return members.get(index);
 
 	}
 
@@ -137,9 +175,9 @@ public class MemberController extends Controller {
 		return -1;
 	}
 
-	public void makeTestDataMember() {
-		members.add(new Member("아이디 1", "0000", "kwonju"));
-		members.add(new Member("아이디 2", "1111", "kwonju"));
-		members.add(new Member("아이디 3", "2222", "kwonju"));
+	public void makeTestData() {
+		members.add(new Member("test1", "0000", "kkkk"));
+		members.add(new Member("test2", "0001", "jjjj"));
+		members.add(new Member("test3", "0002", "llll"));
 	}
 }
