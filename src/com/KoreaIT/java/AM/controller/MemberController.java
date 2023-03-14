@@ -13,7 +13,6 @@ public class MemberController extends Controller {
 	private Scanner sc;
 	private String command;
 	private String actionMethodName;
-	public static Member loginedMember = null; // 전역변수, ~logout
 
 	int lastMemberId = 3;
 
@@ -44,33 +43,23 @@ public class MemberController extends Controller {
 			break;
 		}
 	}
+
 	/** 회원정보 출력 */
 	private void showProfile() {
-		if (isLogined()) {
-			System.out.println("== 현재 로그인 된 회원의 정보 ==");
-			System.out.printf("로그인 아이디 : %s\n", loginedMember.loginId);
-			System.out.printf("이름 : %s\n", loginedMember.userName);
-			return;
-		}
-		System.out.println("로그아웃 상태입니다");
+		System.out.println("== 현재 로그인 된 회원의 정보 ==");
+		System.out.println("회원 id값 : " + loginedMember.id);
+		System.out.printf("로그인 아이디 : %s\n", loginedMember.loginId);
+		System.out.printf("이름 : %s\n", loginedMember.userName);
 	}
 
 	/** 로그아웃 기능 */
 	private void doLogout() {
-		if (isLogined()) {
-			loginedMember = null;
-			System.out.println("로그아웃되었습니다");
-			return;
-		}
-		System.out.println("로그아웃 상태입니다");
+		loginedMember = null;
+		System.out.println("로그아웃되었습니다");
 	}
 
 	/** 로그인 기능 */
 	private void doLogin() {
-		if (isLogined()) {
-			System.out.println("현재 로그인 상태입니다");
-			return;
-		}
 		System.out.print("아이디 : ");
 		String loginId = sc.nextLine();
 		Member member = getMemberByLoginId(loginId);
@@ -94,10 +83,6 @@ public class MemberController extends Controller {
 
 	/** 회원가입 기능 */
 	private void dojoin() {
-		if (isLogined()) {
-			System.out.println("현재 사용할 수 없는 기능입니다");
-			return;
-		}
 		int id = lastMemberId + 1;
 		String userId = null;
 		String userPassword = null;
@@ -128,11 +113,10 @@ public class MemberController extends Controller {
 		System.out.print("이름 : ");
 		String name = sc.nextLine();
 
-		Member member = new Member(userId, userPassword, name);
+		Member member = new Member(id, userId, userPassword, name);
 		members.add(member);
 		System.out.println(id + "번 회원이 가입되었습니다");
 		lastMemberId++;
-		return;
 	}
 
 	/** loginId 찾아 Member 인스턴스 반환 */
@@ -167,8 +151,8 @@ public class MemberController extends Controller {
 	}
 
 	public void makeTestData() {
-		members.add(new Member("test1", "0000", "kkkk"));
-		members.add(new Member("test2", "0001", "jjjj"));
-		members.add(new Member("test3", "0002", "llll"));
+		members.add(new Member(1, "test1", "0000", "kkkk"));
+		members.add(new Member(2, "test2", "0001", "jjjj"));
+		members.add(new Member(3, "test3", "0002", "llll"));
 	}
 }

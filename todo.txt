@@ -2,12 +2,9 @@ Todo
 
 23-03-14
 
-로그인 o
--write
--delete
--modify
--logout
--profile
+게시글에 작성자의 정보 저장
+- loginedMember.id
+- memberId
 
-로그인 x
-이외
+1. 수정 / 삭제 권한 설정
+2. 중복제거
