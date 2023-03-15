@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import com.KoreaIT.java.AM.container.Container;
+import com.KoreaIT.java.AM.dao.ArticleDao;
 import com.KoreaIT.java.AM.dto.Article;
 import com.KoreaIT.java.AM.dto.Member;
 import com.KoreaIT.java.AM.util.Util;
@@ -14,8 +15,6 @@ public class ArticleController extends Controller {
 	private Scanner sc;
 	private String command;
 	private String actionMethodName;
-
-	int lastArticleId = 3;
 
 	public ArticleController(Scanner sc) {
 		this.articles = Container.articleDao.articles; // 저장 위치
@@ -71,20 +70,18 @@ public class ArticleController extends Controller {
 				return;
 			}
 		}
-		
 		String writerName = null;
-		
 
 		System.out.println(" 번호 / 제목 / 조회 수 / 작성자");
 		for (int i = forPrintArticles.size() - 1; i >= 0; i--) {
-			
+
 			String foundMember = null;
-			
+
 			List<Member> members = Container.memberDao.members;
 			Article article = forPrintArticles.get(i);
-			
-			for(Member member : members) {
-				if(member.id == article.id) {
+
+			for (Member member : members) {
+				if (member.id == article.id) {
 					writerName = member.userName;
 				}
 			}
@@ -94,16 +91,20 @@ public class ArticleController extends Controller {
 
 	/** 게시글 작성 */
 	private void doWrite() {
-		int id = lastArticleId + 1;
+		int id = Container.articleDao.setNewId();
 		System.out.print("제목 : ");
 		String title = sc.nextLine();
 		String regDate = Util.getNowDateTimeStr();
 		System.out.print("내용 : ");
 		String content = sc.nextLine();
 		Article article = new Article(id, regDate, regDate, loginedMember.id, title, content);
-		articles.add(article);
+
+		/*
+		 * add는 DB입장에서 요소가 추가되는 것, controller에서 건드리면 안되는 부분,
+		 */
+		Container.articleDao.add(article);
+
 		System.out.printf("%d번 글이 생성되었습니다\n", id);
-		lastArticleId++;
 	}
 
 	/** 게시글 상세보기 */
@@ -144,12 +145,12 @@ public class ArticleController extends Controller {
 			System.out.printf("%d번 게시물은 존재하지 않습니다\n", id);
 			return;
 		}
-		
-		if(foundArticle.memberId != loginedMember.id) {
+
+		if (foundArticle.memberId != loginedMember.id) {
 			System.out.println("권한이 없습니다");
 			return;
 		}
-		
+
 		foundArticle.updateDate = Util.getNowDateTimeStr();
 		System.out.print("제목 : ");
 		foundArticle.title = sc.nextLine();
@@ -172,16 +173,16 @@ public class ArticleController extends Controller {
 			System.out.printf("%d번 게시물은 존재하지 않습니다\n", id);
 			return;
 		}
-		
-		/* 
-		 게시글의 존재 여부와 게시글의 memberId값을 확인한 후 권한 여부를 따져야하므로,
-		 case가 아닌 method 내부, 본 위치에 작성해줌이 옳다
+
+		/*
+		 * 게시글의 존재 여부와 게시글의 memberId값을 확인한 후 권한 여부를 따져야하므로, case가 아닌 method 내부, 본 위치에
+		 * 작성해줌이 옳다
 		 */
-		if(foundArticle.memberId != loginedMember.id) {
+		if (foundArticle.memberId != loginedMember.id) {
 			System.out.println("권한이 없습니다");
 			return;
 		}
-		
+
 		articles.remove(foundArticle);
 		System.out.printf("%d번 게시물이 삭제되었습니다\n", id);
 	}
@@ -211,8 +212,11 @@ public class ArticleController extends Controller {
 	/* 테스트 데이터 생성 */
 	public void makeTestData() {
 		System.out.println("테스트를 위한 데이터를 생성합니다");
-		articles.add(new Article(1, Util.getNowDateTimeStr(), Util.getNowDateTimeStr(), 3, "제목1", "내용1", 11));
-		articles.add(new Article(2, Util.getNowDateTimeStr(), Util.getNowDateTimeStr(), 2, "제목2", "내용2", 22));
-		articles.add(new Article(3, Util.getNowDateTimeStr(), Util.getNowDateTimeStr(), 2, "제목3", "내용3", 33));
+		Container.articleDao
+				.add(new Article(1, Util.getNowDateTimeStr(), Util.getNowDateTimeStr(), 3, "제목1", "내용1", 11));
+		Container.articleDao
+				.add(new Article(2, Util.getNowDateTimeStr(), Util.getNowDateTimeStr(), 2, "제목2", "내용2", 22));
+		Container.articleDao
+				.add(new Article(3, Util.getNowDateTimeStr(), Util.getNowDateTimeStr(), 2, "제목3", "내용3", 33));
 	}
 }

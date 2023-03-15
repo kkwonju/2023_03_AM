@@ -5,10 +5,24 @@ import java.util.List;
 
 import com.KoreaIT.java.AM.dto.Article;
 
-public class ArticleDao {
+public class ArticleDao extends Dao {
 	public List<Article> articles;
+	
+	public int getLastId() {
+		return lastId;
+	}
 	
 	public ArticleDao() {
 		articles = new ArrayList<>();
+		// List<Article> articles; => Cannot invoke java.util.List.add(Object) because this.articles is null
+	}
+
+	public void add(Article article) {
+		articles.add(article);
+		lastId++;
+	}
+
+	public int setNewId() {
+		return lastId + 1;
 	}
 }

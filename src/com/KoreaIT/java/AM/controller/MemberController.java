@@ -12,8 +12,6 @@ public class MemberController extends Controller {
 	private String command;
 	private String actionMethodName;
 
-	int lastMemberId = 3;
-
 	public MemberController(Scanner sc) {
 		this.members = Container.memberDao.members; // 저장 위치
 		this.sc = sc;
@@ -45,7 +43,7 @@ public class MemberController extends Controller {
 	/** 회원정보 출력 */
 	private void showProfile() {
 		System.out.println("== 현재 로그인 된 회원의 정보 ==");
-		System.out.println("회원 id값 : " + loginedMember.id);
+		System.out.printf("회원 번호 : %d\n", loginedMember.id);
 		System.out.printf("로그인 아이디 : %s\n", loginedMember.loginId);
 		System.out.printf("이름 : %s\n", loginedMember.userName);
 	}
@@ -81,7 +79,7 @@ public class MemberController extends Controller {
 
 	/** 회원가입 기능 */
 	private void dojoin() {
-		int id = lastMemberId + 1;
+		int id = Container.memberDao.setNewId();
 		String userId = null;
 		String userPassword = null;
 		String passwordConfirm = null;
@@ -112,9 +110,8 @@ public class MemberController extends Controller {
 		String name = sc.nextLine();
 
 		Member member = new Member(id, userId, userPassword, name);
-		members.add(member);
+		Container.memberDao.add(member);
 		System.out.println(id + "번 회원이 가입되었습니다");
-		lastMemberId++;
 	}
 
 	/** loginId 찾아 Member 인스턴스 반환 */
@@ -149,8 +146,8 @@ public class MemberController extends Controller {
 	}
 
 	public void makeTestData() {
-		members.add(new Member(1, "test1", "0000", "kkkk"));
-		members.add(new Member(2, "test2", "0001", "jjjj"));
-		members.add(new Member(3, "test3", "0002", "llll"));
+		Container.memberDao.add(new Member(1, "test1", "0000", "kkkk"));
+		Container.memberDao.add(new Member(2, "test2", "0001", "jjjj"));
+		Container.memberDao.add(new Member(3, "test3", "0002", "llll"));
 	}
 }

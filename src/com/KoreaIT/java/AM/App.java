@@ -29,7 +29,7 @@ public class App {
 			if (command.equals("exit")) {
 				break;
 			}
-
+			
 			/* 주요 Start */
 			String[] commandDiv = command.split(" ");
 			String controllerName = commandDiv[0];
@@ -77,11 +77,7 @@ public class App {
 				}
 				break;
 			}
-			
-			
-
 			controller.doAction(actionMethodName, command);
-			
 			/* 주요 End */
 
 		}
