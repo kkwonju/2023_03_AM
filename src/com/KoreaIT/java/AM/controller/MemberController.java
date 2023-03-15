@@ -7,7 +7,7 @@ import com.KoreaIT.java.AM.container.Container;
 import com.KoreaIT.java.AM.dto.Member;
 
 public class MemberController extends Controller {
-	public static List<Member> members;
+	private static List<Member> members;
 	private Scanner sc;
 	private String command;
 	private String actionMethodName;
@@ -56,38 +56,56 @@ public class MemberController extends Controller {
 
 	/** 로그인 기능 */
 	private void doLogin() {
-		System.out.print("아이디 : ");
-		String loginId = sc.nextLine();
-		Member member = getMemberByLoginId(loginId);
+		Member member = null;
+		String loginId = null;
+		String loginPw = null;
+
+		while (true) {
+			System.out.print("아이디 : ");
+			loginId = sc.nextLine().trim();
+			if (loginId.length() == 0) {
+				System.out.println("아이디를 입력해주세요");
+				continue;
+			}
+			break;
+		}
+		while (true) {
+			System.out.print("비밀번호 : ");
+			loginPw = sc.nextLine().trim();
+			if (loginPw.length() == 0) {
+				System.out.println("비밀번호를 입력해주세요");
+				continue;
+			}
+			break;
+		}
+		member = getMemberByLoginId(loginId);
 
 		if (member == null) {
 			System.out.println("일치하는 회원이 없습니다");
 			return;
 		}
-		System.out.print("비밀번호 : ");
-		String loginPw = sc.nextLine();
 		if (member.loginPw.equals(loginPw) == false) {
 			System.out.println("비밀번호가 일치하지 않습니다");
 			return;
 		}
 		loginedMember = member;
 		System.out.printf("반갑습니다, %s님!\n", loginedMember.userName);
-		/*
-		 * 로그인 상태 판단, boolean 또는 int는 추가적인 데이터를 사용할 수 없음
-		 */
 	}
 
 	/** 회원가입 기능 */
 	private void dojoin() {
 		int id = Container.memberDao.setNewId();
-		String userId = null;
-		String userPassword = null;
-		String passwordConfirm = null;
+		String loginId = null;
+		String loginPw = null;
+		String loginPwConfirm = null;
 
 		while (true) {
 			System.out.print("아이디 : ");
-			userId = sc.nextLine();
-			if (isJoinalbeUserID(userId) == false) {
+			loginId = sc.nextLine().trim();
+			if (loginId.length() == 0) {
+				System.out.println("필수정보입니다");
+				continue;
+			} else if (isJoinalbeUserID(loginId) == false) {
 				System.out.println("사용 중인 아이디입니다");
 				continue; // false == false > 사용 불가능해 == 불가능 > true > 다시 입력
 			}
@@ -96,11 +114,14 @@ public class MemberController extends Controller {
 		}
 		while (true) {
 			System.out.print("비밀번호 : ");
-			userPassword = sc.nextLine();
+			loginPw = sc.nextLine().trim();
+			if (loginPw.length() == 0) {
+				System.out.println("필수정보입니다");
+				continue;
+			}
 			System.out.print("비밀번호 확인 : ");
-			passwordConfirm = sc.nextLine();
-
-			if (userPassword.equals(passwordConfirm) == false) {
+			loginPwConfirm = sc.nextLine();
+			if (loginPw.equals(loginPwConfirm) == false) {
 				System.out.println("비밀번호를 확인해주세요");
 				continue;
 			}
@@ -109,7 +130,7 @@ public class MemberController extends Controller {
 		System.out.print("이름 : ");
 		String name = sc.nextLine();
 
-		Member member = new Member(id, userId, userPassword, name);
+		Member member = new Member(id, loginId, loginPw, name);
 		Container.memberDao.add(member);
 		System.out.println(id + "번 회원이 가입되었습니다");
 	}

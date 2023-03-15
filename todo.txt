@@ -2,15 +2,5 @@ Todo
 
 0315
 
-1. article list 작성자 이름 노출
-
-고객
-Main
-App
-
-Controller 
-service
-Dao (안에 ArrayList)
-( DB )
-
-Container가 Dao 관리_공유 자원
+1. member login 필수정보 입력 확인
+2. member join 필수정보 입력 확인

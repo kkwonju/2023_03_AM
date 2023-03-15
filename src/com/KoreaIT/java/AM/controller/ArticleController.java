@@ -15,6 +15,8 @@ public class ArticleController extends Controller {
 	private Scanner sc;
 	private String command;
 	private String actionMethodName;
+	String writerName = null;
+	private List<Member> members = Container.memberDao.members;
 
 	public ArticleController(Scanner sc) {
 		this.articles = Container.articleDao.articles; // 저장 위치
@@ -70,18 +72,14 @@ public class ArticleController extends Controller {
 				return;
 			}
 		}
-		String writerName = null;
 
 		System.out.println(" 번호 / 제목 / 조회 수 / 작성자");
 		for (int i = forPrintArticles.size() - 1; i >= 0; i--) {
 
-			String foundMember = null;
-
-			List<Member> members = Container.memberDao.members;
 			Article article = forPrintArticles.get(i);
 
 			for (Member member : members) {
-				if (member.id == article.id) {
+				if (member.id == article.memberId) {
 					writerName = member.userName;
 				}
 			}
@@ -120,10 +118,15 @@ public class ArticleController extends Controller {
 			System.out.printf("%d번 게시물은 존재하지 않습니다\n", id);
 			return;
 		}
+		for (Member member : members) {
+			if (member.id == foundArticle.id) {
+				writerName = member.userName;
+			}
+		}
 		System.out.println("번호 : " + foundArticle.id);
 		System.out.println("날짜 : " + foundArticle.regDate);
 		System.out.println("수정날짜 : " + foundArticle.updateDate);
-		System.out.println("작성자 : " + foundArticle.memberId);
+		System.out.println("작성자 : " + writerName);
 		System.out.println("제목 : " + foundArticle.title);
 		System.out.println("내용 : " + foundArticle.content);
 		System.out.println("조회 수 : " + foundArticle.hit);
