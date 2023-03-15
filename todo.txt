@@ -1,10 +1,16 @@
 Todo
 
-23-03-14
+0315
 
-게시글에 작성자의 정보 저장
-- loginedMember.id
-- memberId
+1. article list 작성자 이름 노출
 
-1. 수정 / 삭제 권한 설정
-2. 중복제거
+고객
+Main
+App
+
+Controller 
+service
+Dao (안에 ArrayList)
+( DB )
+
+Container가 Dao 관리_공유 자원

@@ -1,12 +1,10 @@
 package com.KoreaIT.java.AM.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import com.KoreaIT.java.AM.dto.Article;
+import com.KoreaIT.java.AM.container.Container;
 import com.KoreaIT.java.AM.dto.Member;
-import com.KoreaIT.java.AM.util.Util;
 
 public class MemberController extends Controller {
 	public static List<Member> members;
@@ -17,7 +15,7 @@ public class MemberController extends Controller {
 	int lastMemberId = 3;
 
 	public MemberController(Scanner sc) {
-		this.members = new ArrayList<>();
+		this.members = Container.memberDao.members; // 저장 위치
 		this.sc = sc;
 	}
 

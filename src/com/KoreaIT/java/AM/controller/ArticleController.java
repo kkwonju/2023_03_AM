@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import com.KoreaIT.java.AM.container.Container;
 import com.KoreaIT.java.AM.dto.Article;
 import com.KoreaIT.java.AM.util.Util;
 
@@ -16,7 +17,7 @@ public class ArticleController extends Controller {
 	int lastArticleId = 3;
 
 	public ArticleController(Scanner sc) {
-		this.articles = new ArrayList<>();
+		this.articles = Container.articleDao.articles; // 저장 위치
 		this.sc = sc;
 	}
 
@@ -73,7 +74,7 @@ public class ArticleController extends Controller {
 		System.out.println(" 번호 / 제목 / 조회 수 / 작성자");
 		for (int i = forPrintArticles.size() - 1; i >= 0; i--) {
 			Article article = forPrintArticles.get(i);
-			System.out.printf(" %d  /  %s  /  %d  /  %d\n ", article.id, article.title, article.hit, article.memberId);
+			System.out.printf(" %d  /  %s  /  %d  /  %s\n ", article.id, article.title, article.hit, article.memberId);
 		}
 	}
 
@@ -158,6 +159,10 @@ public class ArticleController extends Controller {
 			return;
 		}
 		
+		/* 
+		 게시글의 존재 여부와 게시글의 memberId값을 확인한 후 권한 여부를 따져야하므로,
+		 case가 아닌 method 내부, 본 위치에 작성해줌이 옳다
+		 */
 		if(foundArticle.memberId != loginedMember.id) {
 			System.out.println("권한이 없습니다");
 			return;
