@@ -9,6 +9,6 @@ public class ArticleDao {
 	public List<Article> articles;
 	
 	public ArticleDao() {
-		List<Article> articles = new ArrayList<>();
+		articles = new ArrayList<>();
 	}
 }

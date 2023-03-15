@@ -6,6 +6,7 @@ import java.util.Scanner;
 
 import com.KoreaIT.java.AM.container.Container;
 import com.KoreaIT.java.AM.dto.Article;
+import com.KoreaIT.java.AM.dto.Member;
 import com.KoreaIT.java.AM.util.Util;
 
 public class ArticleController extends Controller {
@@ -70,11 +71,24 @@ public class ArticleController extends Controller {
 				return;
 			}
 		}
+		
+		String writerName = null;
+		
 
 		System.out.println(" 번호 / 제목 / 조회 수 / 작성자");
 		for (int i = forPrintArticles.size() - 1; i >= 0; i--) {
+			
+			String foundMember = null;
+			
+			List<Member> members = Container.memberDao.members;
 			Article article = forPrintArticles.get(i);
-			System.out.printf(" %d  /  %s  /  %d  /  %s\n ", article.id, article.title, article.hit, article.memberId);
+			
+			for(Member member : members) {
+				if(member.id == article.id) {
+					writerName = member.userName;
+				}
+			}
+			System.out.printf(" %d  /  %s  /  %d  /  %s\n ", article.id, article.title, article.hit, writerName);
 		}
 	}
 

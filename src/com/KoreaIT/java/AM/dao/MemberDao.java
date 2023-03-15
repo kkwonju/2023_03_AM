@@ -9,6 +9,6 @@ public class MemberDao {
 	public List<Member> members;
 
 	public MemberDao() {
-		List<Member> members = new ArrayList<>();
+		members = new ArrayList<>();
 	}
 }
