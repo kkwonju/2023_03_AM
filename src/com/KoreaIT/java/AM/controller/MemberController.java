@@ -7,7 +7,7 @@ import com.KoreaIT.java.AM.container.Container;
 import com.KoreaIT.java.AM.dto.Member;
 
 public class MemberController extends Controller {
-	private static List<Member> members;
+	static List<Member> members;
 	private Scanner sc;
 	private String command;
 	private String actionMethodName;

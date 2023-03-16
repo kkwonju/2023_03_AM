@@ -2,5 +2,12 @@ Todo
 
 0315
 
-1. member login 필수정보 입력 확인
-2. member join 필수정보 입력 확인
+권한 판단해가며 구현
+service 구현 중
+ArticleService
+MemberService
+
+1. 각 클래스에서 생성자가 무엇을 해줘야하는지
+2. 없는 기능은 만들어서
+
+controller > service > (container(dao(Array)))
