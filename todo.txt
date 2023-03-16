@@ -1,26 +1,5 @@
 Todo
 
-0315
+0316
 
-권한 판단해가며 구현
-service 구현 중
-ArticleService
-MemberService
-
-1. 각 클래스에서 생성자가 무엇을 해줘야하는지
-2. 없는 기능은 만들어서
-
-controller > service > (container(dao(Array)))
-
-
-1. searchKeyword를 매개변수로,
-2. 검색어의 길이가 0이 아니고 (무언가 입력되었고)
-    검색어가 null이 아닐 때 ( 데이터가 유효할 때 )
-3. 리스트(forPrintArticles)에 새 arraylist 생성
-    (검색어와 일치하는 데이터가 들어갈 리스트)
-4. 일치하면 리스트에 추가,
-   일치하는게 없다면 기존 데이터를 내보내
-5. forPrintArticles 데이터를 불러온 뒤
-Aritlce의 memberId와 Member의 id를
-비교한 후 member의 userName을 writerName에
-저장
+MemberService 구현 v

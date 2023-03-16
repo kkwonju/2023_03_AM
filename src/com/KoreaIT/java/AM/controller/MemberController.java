@@ -5,16 +5,18 @@ import java.util.Scanner;
 
 import com.KoreaIT.java.AM.container.Container;
 import com.KoreaIT.java.AM.dto.Member;
+import com.KoreaIT.java.AM.sevice.MemberService;
 
 public class MemberController extends Controller {
 	static List<Member> members;
 	private Scanner sc;
 	private String command;
 	private String actionMethodName;
+	private MemberService memberService;
 
 	public MemberController(Scanner sc) {
-		this.members = Container.memberDao.members; // 저장 위치
 		this.sc = sc;
+		this.memberService = Container.memberService; // 저장 위치
 	}
 
 	public void doAction(String actionMethodName, String command) {
@@ -78,7 +80,7 @@ public class MemberController extends Controller {
 			}
 			break;
 		}
-		member = getMemberByLoginId(loginId);
+		member = memberService.getMemberByLoginId(loginId);
 
 		if (member == null) {
 			System.out.println("일치하는 회원이 없습니다");
@@ -94,7 +96,7 @@ public class MemberController extends Controller {
 
 	/** 회원가입 기능 */
 	private void dojoin() {
-		int id = Container.memberDao.setNewId();
+		int id = memberService.setNewId();
 		String loginId = null;
 		String loginPw = null;
 		String loginPwConfirm = null;
@@ -105,7 +107,7 @@ public class MemberController extends Controller {
 			if (loginId.length() == 0) {
 				System.out.println("필수정보입니다");
 				continue;
-			} else if (isJoinalbeUserID(loginId) == false) {
+			} else if (memberService.isJoinalbeUserID(loginId) == false) {
 				System.out.println("사용 중인 아이디입니다");
 				continue; // false == false > 사용 불가능해 == 불가능 > true > 다시 입력
 			}
@@ -131,44 +133,13 @@ public class MemberController extends Controller {
 		String name = sc.nextLine();
 
 		Member member = new Member(id, loginId, loginPw, name);
-		Container.memberDao.add(member);
+		memberService.add(member);
 		System.out.println(id + "번 회원이 가입되었습니다");
 	}
 
-	/** loginId 찾아 Member 인스턴스 반환 */
-	private Member getMemberByLoginId(String loginId) {
-		int index = getMemberByUserID(loginId);
-		if (index == -1) {
-			return null;
-		}
-		return members.get(index);
-
-	}
-
-	/** 로그인 아이디 중복검사 */
-	public boolean isJoinalbeUserID(String loginId) {
-		int index = getMemberByUserID(loginId);
-		if (index == -1) {
-			return true; // 일치하는 값이 없었다 > 그러니 사용 가능하다
-		}
-		return false; // 일치하는 값이 있었다 > 중복된다
-	}
-
-	/** loginId 찾아 index 반환 */
-	public int getMemberByUserID(String loginId) {
-		int i = 0;
-		for (Member member : members) {
-			if (member.loginId.equals(loginId)) { // equals와 ==의 차이
-				return i;
-			}
-			i++;
-		}
-		return -1;
-	}
-
 	public void makeTestData() {
-		Container.memberDao.add(new Member(1, "test1", "0000", "kkkk"));
-		Container.memberDao.add(new Member(2, "test2", "0001", "jjjj"));
-		Container.memberDao.add(new Member(3, "test3", "0002", "llll"));
+		memberService.add(new Member(1, "test1", "0000", "kkkk"));
+		memberService.add(new Member(2, "test2", "0001", "jjjj"));
+		memberService.add(new Member(3, "test3", "0002", "llll"));
 	}
 }
